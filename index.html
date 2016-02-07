@@ -1,0 +1,48 @@
+---
+# Index Page
+---
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>{{ site.name }} | {{ site.url }}</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/assets/css/main.css" type="text/css" />
+  </head>
+  <body class="is-loading">
+    <div id="wrapper">
+      <section id="main">
+        <header>
+          <span class="avatar"><img src="{{ site.avatar }}" alt="" /></span>
+          <h1>{{ site.name }}</h1>
+          <p>
+            {{ site.description }}
+          </p>
+        </header>
+        <footer>
+          <ul class="icons">
+            {% for link in site.links %}
+            <li><a href="{{ link.url }}" class="fa-{{ link.icon }}" title="{{ link.title }}">{{ link.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </footer>
+      </section>
+      <footer id="footer">
+        <ul class="copyright">
+          <li>&copy; {{ site.name }}</li>
+        </ul>
+      </footer>
+    </div>
+    <script>
+      var replaceClassName = function(){ document.body.className = document.body.className.replace(/\bis-loading\b/, ''); }
+      if ('addEventListener' in window) {
+        window.addEventListener('load', function() {
+          replaceClassName();
+        });
+      } else {
+        replaceClassName();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+name: Kevin Thompson
+url: http://kevinthompson.info
+description: Developer, writer, host, husband, and father of two beautiful little girls.
+avatar: http://www.gravatar.com/avatar/a3cf628d464cdf62fd491a62e75ac046?s=200
+links:
+  - title: Twitter
+    icon: twitter
+    url: http://twitter.com/kevinthompson
+  - title: Github
+    icon: github
+    url: http://github.com/kevinthompson
+  - title: Portfolio
+    icon: briefcase
+    url: http://madebykevin.com
+  - title: Email
+    icon: envelope
+    url: mailto:kevin@kevinthompson.info
