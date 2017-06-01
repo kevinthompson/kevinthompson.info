@@ -9,8 +9,8 @@ links:
   - title: Github
     icon: github
     url: http://github.com/kevinthompson
-  - title: Portfolio
-    icon: briefcase
+  - title: Blog
+    icon: rss
     url: http://signalexception.com
   - title: Email
     icon: envelope
