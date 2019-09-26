@@ -3,14 +3,14 @@ url: http://kevinthompson.info
 description: Developer; indie game enthusiast; husband; father of two clever little girls and a mischievous toddler.
 avatar: http://www.gravatar.com/avatar/a3cf628d464cdf62fd491a62e75ac046?s=200
 links:
-  - title: Twitter
-    icon: twitter
+  - title: Social
+    icon: social-profile
     url: http://twitter.com/kevinthompson
   - title: Github
     icon: github
     url: http://github.com/kevinthompson
   - title: Blog
-    icon: rss
+    icon: blog
     url: http://signalexception.com
   - title: Email
     icon: envelope
