@@ -28,12 +28,6 @@
       &:before
         text-shadow: $size 0px 0px _palette(highlight), ($size * -1) 0px 0px _palette(highlight), 0px $size 0px _palette(highlight), 0px ($size * -1) 0px _palette(highlight)
 
-.fa-social-profile:before
-  content: "\f099"
-
-.fa-blog:before
-  content: "\f09e"
-
 // Base
 @import base/page
 @import base/typography
@@ -47,3 +41,10 @@
 @import layout/main
 @import layout/footer
 @import layout/wrapper
+
+// Overrides
+.fa-social-profile:before
+  content: "\f099"
+
+.fa-blog:before
+  content: "\f09e"
