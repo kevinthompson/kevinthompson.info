@@ -27,7 +27,7 @@
         <footer>
           <ul class="icons">
             {% for link in site.links %}
-            <li><a href="{{ link.url }}" class="fab fa-{{ link.icon }}" title="{{ link.title }}">{{ link.title }}</a></li>
+            <li><a href="{{ link.url }}" class="{{ link.icon }}" title="{{ link.title }}">{{ link.title }}</a></li>
             {% endfor %}
           </ul>
         </footer>

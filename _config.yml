@@ -4,14 +4,14 @@ description: Developer; indie game enthusiast; husband; father of two clever lit
 avatar: /assets/images/logo.png
 links:
   - title: Social
-    icon: social-profile
+    icon: fab fa-social-profile
     url: https://twitter.com/kevinthompson
   - title: Github
-    icon: github
+    icon: fab fa-github
     url: https://github.com/kevinthompson
   - title: Itch.io
-    icon: itch-io
+    icon: fab fa-itch-io
     url: https://kevinthompson.itch.io
   - title: Email
-    icon: envelope
+    icon: fas fa-envelope
     url: mailto:email@kevinthompson.info
