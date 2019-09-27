@@ -1,17 +1,17 @@
 name: Kevin Thompson
 url: https://kevinthompson.info
 description: Developer; indie game enthusiast; husband; father of two clever little girls and a mischievous toddler.
-avatar: https://www.gravatar.com/avatar/a3cf628d464cdf62fd491a62e75ac046?s=200
+avatar: /assets/images/logo.png
 links:
   - title: Social
     icon: social-profile
-    url: http://twitter.com/kevinthompson
+    url: https://twitter.com/kevinthompson
   - title: Github
     icon: github
-    url: http://github.com/kevinthompson
-  - title: Blog
-    icon: blog
-    url: http://signalexception.com
+    url: https://github.com/kevinthompson
+  - title: Itch.io
+    icon: itch-io
+    url: https://kevinthompson.itch.io
   - title: Email
     icon: envelope
     url: mailto:email@kevinthompson.info
