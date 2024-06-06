@@ -1,0 +1,137 @@
+---
+import { Image } from 'astro:assets'
+import logoIcon from '@images/logo-icon.png'
+import Button from '@components/Button.astro'
+import Icon from 'astro-icon'
+
+const pathname = Astro.url.pathname.replace(/(?<=.)\/$/, '')
+
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Games', href: 'https://kevinthompson.itch.io/' },
+]
+---
+
+<header class="h-24 border-b border-slate-200/80 bg-white">
+  <div
+    class="mx-auto flex h-full w-full max-w-screen-xl items-center px-5 sm:px-6 lg:px-8"
+  >
+    <nav class="relative z-50 flex w-full items-center justify-between">
+      <!-- Logo -->
+      <div class="flex shrink-0 items-center">
+        <a href="/" aria-label="Home" class="flex flex-shrink-0 items-center">
+          <Image
+            src={logoIcon}
+            alt=""
+            class="h-12 w-auto block mr-2"
+          />
+          <span class="uppercase font-semibold text-xl text-slate-900 hidden sm:inline">Kevin Thompson</span>
+        </a>
+      </div>
+
+      <!-- Desktop navigation links -->
+      <div class="hidden items-center md:flex md:space-x-6 lg:space-x-8">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class:list={[
+                'relative duration-200 after:absolute after:-bottom-2.5 after:left-1/2 after:h-0.5 after:w-4 after:-translate-x-1/2 after:rounded-full after:bg-slate-900 after:opacity-0 after:content-[""]',
+                pathname === link.href
+                  ? 'font-semibold text-slate-900 after:opacity-100'
+                  : 'font-medium text-slate-700 hover:text-slate-900 hover:after:opacity-25',
+              ]}
+              data-pathname={pathname}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="flex items-center">
+        <!-- Call to action -->
+        <Button href="mailto:email@kevinthompson.info?subject=Hello from kevinthompson.info!" variant="secondary">
+          <Icon name="envelope" class="h-4 w-4" />
+          Email me
+        </Button>
+
+        <!-- Mobile menu button -->
+        <div class="ml-4 md:hidden" x-data="{ mobileMenuOpen: false }">
+          <button
+            class="group relative z-50 flex cursor-pointer items-center justify-center rounded-full bg-slate-100/80 p-3 shadow-sm shadow-amber-100/50 ring-1 ring-slate-900/5 transition duration-300 ease-in-out hover:bg-slate-200/60 focus:outline-none md:hidden"
+            aria-label="Toggle Navigation"
+            @click="mobileMenuOpen=!mobileMenuOpen"
+          >
+            <span
+              class="relative h-3.5 w-4 transform transition duration-500 ease-in-out"
+            >
+              <span
+                class="absolute block h-0.5 rotate-0 transform rounded-full bg-slate-700 opacity-100 transition-all duration-300 ease-in-out group-hover:bg-slate-900"
+                :class="mobileMenuOpen ? 'top-1.5 left-1/2 w-0': 'top-0 left-0 w-full'"
+              ></span>
+              <span
+                class="absolute left-0 top-1.5 block h-0.5 w-full transform rounded-full bg-slate-700 opacity-100 transition-all duration-300 ease-in-out group-hover:bg-slate-900"
+                :class="mobileMenuOpen ? 'rotate-45': 'rotate-0'"></span>
+              <span
+                class="absolute left-0 top-1.5 block h-0.5 w-full transform rounded-full bg-slate-700 opacity-100 transition-all duration-300 ease-in-out group-hover:bg-slate-900"
+                :class="mobileMenuOpen ? '-rotate-45': 'rotate-0'"></span>
+              <span
+                class="absolute block h-0.5 rotate-0 transform rounded-full bg-slate-700 opacity-100 transition-all duration-300 ease-in-out group-hover:bg-slate-900"
+                :class="mobileMenuOpen ? 'top-1.5 left-1/2 w-0': 'left-0 top-3 w-full'"
+              ></span>
+            </span>
+          </button>
+
+          <!-- Mobile menu container -->
+          <div class="md:hidden">
+            <!-- Background dark overlay when mobile menu is open -->
+            <div
+              x-show="mobileMenuOpen"
+              x-transition:enter="duration-200 ease-out"
+              x-transition:enter-start="opacity-0"
+              x-transition:enter-end="opacity-100"
+              x-transition:leave="duration-150 ease-in"
+              x-transition:leave-start="opacity-100"
+              x-transition:leave-end="opacity-0"
+              class="fixed inset-0 z-20 bg-slate-900 bg-opacity-50"
+              style="display: none"
+            >
+            </div>
+
+            <!-- Mobile menu popover -->
+            <div
+              x-show="mobileMenuOpen"
+              x-transition:enter="duration-300 ease-out"
+              x-transition:enter-start="opacity-0 scale-90"
+              x-transition:enter-end="opacity-100 scale-100"
+              x-transition:leave="duration-200 ease-in"
+              x-transition:leave-start="opacity-100 scale-100"
+              x-transition:leave-end="opacity-0 scale-90"
+              class="absolute inset-x-0 top-full z-30 mt-4 origin-top overflow-hidden rounded-2xl bg-slate-50 px-6 py-7 shadow-xl shadow-amber-100/40 ring-1 ring-slate-900/5"
+              style="display: none"
+              @click.away="mobileMenuOpen = false"
+            >
+              <div>
+                <!-- Mobile menu links -->
+                <div class="flex flex-col space-y-4">
+                  {
+                    links.map((link) => (
+                      <a
+                        href={link.href}
+                        class="block text-base font-semibold text-slate-700 duration-200 hover:text-slate-900"
+                      >
+                        {link.label}
+                      </a>
+                    ))
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>

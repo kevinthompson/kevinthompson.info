@@ -1,0 +1,160 @@
+---
+publishDate: 2023-09-30
+title: 'Generate Pixel Perfect Colliders from Sprites in Godot'
+category: 'Tutorials'
+image:
+  src: '@images/blog/godot-sprite-collider.jpg'
+  alt: 'Godot editor interface showing sprite colliders'
+description: 'How I created a tool script that automatically generates pixel perfect colliders from a 2D sprites as the image changes.'
+---
+
+import Image from '@components/mdx/MdxImage.astro'
+import sprite2dCreatePolygonImage from '@images/blog/godot-sprite-tool/sprite2d-collision-ui.png'
+import godotCollisionModalImage from '@images/blog/godot-sprite-tool/godot-collision-modal.png'
+import godotTextureExample from '@images/blog/godot-sprite-tool/texture-example.gif'
+
+Recently I was watching [Adam from Indie Tales on Twitch](https://www.twitch.tv/adamcyounis) working on a [game jam entry in Godot](https://uppon-hill.itch.io/though-i-walk). He was quickly iterating on level layouts and wanted to find a way to generate colliders from the level sprites he was drawing without needing to manually delete and recreate collision siblings every time he changed his artwork.
+
+Although I don't yet have a great deal of experince in Godot, this seemed like an interesting problem to solve so I dug in.
+
+---
+
+## Existing Functionality
+
+To start I'll point out that there is a built-in tool to create collision shapes from sprites in Godot. To access it, you click the `Sprite2D` dropdown when you have a Sprite2D node selected.
+
+<Image
+  src={sprite2dCreatePolygonImage}
+  alt="Sprite2D node dropdown in Godot editor"
+/>
+
+Clicking on that option brings up a modal that will allow you to customize and then create your `CollisionPolygon2D` node.
+
+<Image
+  src={godotCollisionModalImage}
+  alt="Godot editor CollisionPolygon2D modal"
+/>
+
+If you're not changing your art often, this feature will probably be all you ever need. In Adam's case, he was making constant changes to level artwork, moving back and forth between Aseprite and Godot to adjust the level and then playtest it. Needing to delete the existing `CollisionPolygon2D` node and then step through the creation process after each change was tedious.
+
+---
+
+## Creating a Tool Script
+
+In Godot, you can [run code inside the editor](https://docs.godotengine.org/en/stable/tutorials/plugins/running_code_in_the_editor.html) by adding `@tool` at the top of a script. In this case, I figured there would likely be a way to tap into the functionality the modal was providing by writing a script that performs the same actions.
+
+To ensure we're only running the code in the editor, we also need to call the `Engine.is_editor_hint()` function. If this function returns `true`, we're currently working in the editor. Here's the initial setup of the script:
+
+```gdscript
+@tool
+extends Node2D
+
+# Regenerate Collision Nodes When Texture Changes
+func _ready():
+	if Engine.is_editor_hint():
+		# TODO: Initialize tool logic here
+```
+
+In researching how to implement this functionality, I found that a `Sprite2D` node fires a signal when it's attached texture changes. In my `_ready` function, I connected that signal to another function that would do the heavy lifting:
+
+```gdscript
+func _ready():
+	if Engine.is_editor_hint():
+		$Sprite2D.connect("texture_changed", _create_polygon2d_nodes_from_sprite2d)
+
+func _create_polygon2d_nodes_from_sprite2d():
+  pass
+```
+
+Now every time we assign a new image to our sprite, or the sprite artwork changes, a signal will fire to execute the code in `_create_polygon2d_nodes_from_sprite2d`. From here we can start implementing an algorithm for creating our collision polygon.
+
+First we need to add a reference to the nodes we'll need to work with. Because I knew the context this script would be used in, I could assume that certain nodes existed as children of the `Node2D` that I was attaching my script to.
+
+```gdscript
+func _create_polygon2d_nodes_from_sprite2d():
+	# Assume Sprite2D with texture and StaticBody2D exist
+	var sprite = $Sprite2D
+	var static_body = $StaticBody2D
+```
+
+Next I needed to remove any existing collision polygons so that we weren't creating additional colliders. To do that, we look for all child nodes of our `StaticBody2D` node and destroy them by calling `queue_free`.
+
+```gdscript
+	# Destroy Existing Collision Polygons
+	for node in static_body.find_children("*", "CollisionPolygon2D"):
+		node.queue_free()
+```
+
+Generating the new collision polygon is where things got a little trickier. I ultimately needed to work backwards from the `CollisionPolygon2D` node. That node can assign a `polygon` which is a `PackedVector2Array[]`. I didn't see any way to go straight from a `Sprite2D` to a `PackedVector2Array[]`, but I did discover a method on `Bitmap` that [`converts opaque pixels to polygons`](https://docs.godotengine.org/en/stable/classes/class_bitmap.html#class-bitmap-method-opaque-to-polygons), and those polygons are represented as a `PackedVector2Array[]`.
+
+The `opaque_to_polygons` method takes two arguments; a `Rect2i` and then a value for `epsilon` which controls the precision of the polygons being generated. A higher number is more performant, while a lower number is more precise. In my case I used an `epsilon` value of `0.0` to ensure the polygons were pixel perfect.
+
+I was getting close, but now I needed to find a way to convert a `Sprite2D` to a `Bitmap`. The connection between the two ended up being the `Image` class. A `Sprite2D` texture has a `get_image` method, and Bitmap has a `create_from_image_alpha`.
+
+Putting all of that together we first get the image from the sprite. Then we initialize a new `Bitmap` and assign it's data the image. After that we get all of the unique polygons in the bitmap (this accounts for disconnected areas of pixels in the original image), and then we use those polygons to create colliders.
+
+```gdscript
+	# Generate Bitmap from Sprite2D
+	var image = sprite.texture.get_image()
+	var bitmap = BitMap.new()
+	bitmap.create_from_image_alpha(image)
+
+	# Convert Bitmap to Polygons
+	var polys = bitmap.opaque_to_polygons(Rect2(Vector2.ZERO, image.get_size()), 0.0)
+
+	# Create CollisionPolygon2D Node for each Polygon
+	for poly in polys:
+		var collision_polygon = CollisionPolygon2D.new()
+		collision_polygon.polygon = poly
+		static_body.add_child(collision_polygon)
+		collision_polygon.set_owner(get_tree().get_edited_scene_root())
+		collision_polygon.position -= sprite.texture.get_size() / 2
+```
+
+---
+
+## The Final Result
+
+Putting everything together, we can now change on our sprite and our colliders are automatically updated.
+
+<img src={godotTextureExample.src} alt="Animated gif showing collisions changing when texture changes in Godot" />
+
+Here's the full script for Godot 4:
+
+```gdscript
+@tool
+extends Node2D
+
+# Regenerate Collision Nodes When Texture Changes
+func _ready():
+	if Engine.is_editor_hint():
+		$Sprite2D.connect("texture_changed", _create_polygon2d_nodes_from_sprite2d)
+
+func _create_polygon2d_nodes_from_sprite2d():
+	# Assume Sprite2D with texture and StaticBody2D exist
+	var sprite = $Sprite2D
+	var static_body = $StaticBody2D
+
+	# Destroy Existing Collision Polygons
+	for node in static_body.find_children("*", "CollisionPolygon2D"):
+		node.queue_free()
+
+	# Generate Bitmap from Sprite2D
+	var image = sprite.texture.get_image()
+	var bitmap = BitMap.new()
+	bitmap.create_from_image_alpha(image)
+
+	# Convert Bitmap to Polygons
+	var polys = bitmap.opaque_to_polygons(Rect2(Vector2.ZERO, image.get_size()), 0.0)
+
+	# Create CollisionPolygon2D Node for each Polygon
+	for poly in polys:
+		var collision_polygon = CollisionPolygon2D.new()
+		collision_polygon.polygon = poly
+		static_body.add_child(collision_polygon)
+		collision_polygon.set_owner(get_tree().get_edited_scene_root())
+		collision_polygon.position -= sprite.texture.get_size() / 2
+
+```
+
+This example requires a specific node hierarchy to exist, but the script could be tweaked to be a little more flexible if this is something you find yourself needing. I have the example project files for Godot 3.5 and 4.x [available on Github](https://github.com/kevinthompson/godot-generate-polygon-from-sprite-tool).

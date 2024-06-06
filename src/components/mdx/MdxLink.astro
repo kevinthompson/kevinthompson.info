@@ -1,0 +1,21 @@
+---
+const { href } = Astro.props
+
+let targetValue = ''
+let relValue = ''
+
+// Check if the href is a relative path or an absolute URL with the same domain
+if (!href.startsWith('/')) {
+  const linkDomain = new URL(href).hostname
+  const currentDomain = Astro.url.hostname
+
+  if (linkDomain !== currentDomain) {
+    targetValue = '_blank'
+    relValue = 'noopener noreferrer'
+  }
+}
+---
+
+<a href={href} target={targetValue} rel={relValue}>
+  <slot />
+</a>

@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets'
+import { Icon } from 'astro-icon'
+import { slugify } from '@utils/slugs'
+import type { Post } from '@types'
+
+interface Props {
+  post: Post
+}
+
+async function getPostData(post: Post) {
+  const { remarkPluginFrontmatter } = await post.render()
+  return {
+    ...post.data,
+    path: `/blog/${post.slug}`,
+    minutesRead: remarkPluginFrontmatter.minutesRead,
+    slug: post.slug,
+  }
+}
+
+const post = await getPostData(Astro.props.post)
+const categorySlug = slugify(post.category)
+---
+
+<article
+  class="flex flex-col items-start justify-between rounded-2xl bg-slate-50 shadow-sm shadow-amber-100/50 ring-1 ring-slate-100"
+  transition:name={post.slug}
+  data-attr={post.slug}
+>
+  <div class="w-full px-4 pt-4">
+    <a
+      href={post.path}
+      class="group aspect-h-9 aspect-w-16 relative block w-full overflow-hidden rounded-xl md:aspect-h-2 md:aspect-w-3"
+    >
+      <Image
+        src={post.image.src}
+        alt={post.image.alt}
+        class="w-full rounded-xl bg-slate-100 object-cover transition duration-300 group-hover:scale-105"
+        transition:name={`${post.slug}-image`}
+      />
+      <div
+        class="absolute inset-0 rounded-xl ring-1 ring-inset ring-slate-900/5"
+      >
+      </div>
+    </a>
+  </div>
+  <div class="group relative flex flex-1 flex-col px-5 pb-10 pt-8 xl:px-7">
+    <a
+      href={`/blog/${categorySlug}#articles`}
+      class="group relative z-10 flex items-center gap-2.5 text-md text-amber-500 transition duration-200 ease-in-out hover:text-amber-400"
+    >
+      <Icon name={categorySlug} class="h-4 w-4 text-amber-400" />
+
+      {post.category}
+    </a>
+    <div class="flex-1">
+      <h3
+        class="mt-4 font-display text-xl font-medium leading-normal text-slate-900 decoration-slate-400 transition duration-200 ease-in-out group-hover:text-amber-500"
+      >
+        <a href={post.path}>
+          <span class="absolute inset-0"></span>
+          {post.title}
+        </a>
+      </h3>
+      <p class="mt-3.5 line-clamp-3 text-md leading-7 text-slate-700">
+        {post.description}
+      </p>
+    </div>
+    <div class="mt-8 flex items-center gap-3 text-sm text-slate-500">
+      <span class="flex items-center gap-1.5">
+        <Icon
+          name="calendar"
+          class="h-5 w-5 text-slate-400"
+          stroke-width="1.75"
+        />
+
+        <!-- Convert post.publishDate to string -->
+        <time datetime={post.publishDate.toISOString()}>
+          {
+            post.publishDate.toLocaleString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })
+          }
+        </time>
+      </span>
+      <span class="flex items-center gap-1.5">
+        <Icon name="clock" class="h-5 w-5 text-slate-400" stroke-width="1.75" />
+        {post.minutesRead}
+      </span>
+    </div>
+  </div>
+</article>

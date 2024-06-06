@@ -1,0 +1,24 @@
+---
+import Container from '@components/Container.astro'
+import BlogGrid from '@components/blog/BlogGrid.astro'
+import Underline from '@components/illustrations/Underline.astro'
+import { getSortedPosts } from '@utils/posts'
+
+const featuredPosts = (await getSortedPosts()).slice(0, 3)
+---
+
+<section class="overflow-hidden bg-white py-16 sm:pt-24 lg:pt-28">
+  <Container>
+    <h2
+      class="mx-auto max-w-2xl text-center font-display text-4xl font-semibold leading-tight text-slate-900 sm:leading-tight"
+    >
+      <span class="relative whitespace-nowrap">
+        <Underline />
+        <span class="relative text-amber-500">Thoughts</span>
+      </span>
+      on software engineering and game development
+    </h2>
+
+    <BlogGrid posts={featuredPosts} featured={true} />
+  </Container>
+</section>

@@ -1,0 +1,15 @@
+---
+import { Image } from 'astro:assets'
+const { alt, caption, src, ...props } = Astro.props
+---
+
+<figure>
+  <Image src={src} class="h-auto w-full rounded-lg" alt={alt} {...props} />
+  {
+    caption && (
+      <figcaption class="mt-3 text-center text-sm text-gray-500">
+        {caption}
+      </figcaption>
+    )
+  }
+</figure>

@@ -1,0 +1,48 @@
+---
+import Icon from 'astro-icon'
+import { getShareUrl } from '@utils/share'
+import CopyURLButton from './CopyURLButton.astro'
+
+const socialPlatforms = ['linkedin', 'facebook', 'x']
+---
+
+<footer class="mx-auto max-w-2xl">
+  <hr class="mt-14 h-px w-full pb-6 text-slate-300/75 sm:pb-4" />
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+    <p
+      class="pl-0.5 text-lg font-semibold tracking-wide text-slate-900 sm:pl-0"
+    >
+      Share article
+    </p>
+    <div class="mt-2.5 flex gap-3 sm:mt-0 sm:gap-4">
+      <CopyURLButton />
+      {
+        socialPlatforms.map((platform) => (
+          <button
+            data-share-url={getShareUrl(platform, Astro.url.toString())}
+            class="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 duration-200 hover:bg-slate-50"
+          >
+            <Icon
+              name={platform}
+              class="h-3.5 w-3.5 fill-slate-500 transition group-hover:fill-slate-600"
+            />
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</footer>
+
+<script>
+  const buttons = document.querySelectorAll('button[data-share-url]')
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      window.open(
+        button.getAttribute('data-share-url') as string,
+        'shareWindow',
+        'width=600,height=400,menubar=no,toolbar=no,resizable=yes,scrollbars=yes',
+      )
+    })
+  })
+</script>

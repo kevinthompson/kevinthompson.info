@@ -1,0 +1,22 @@
+---
+import Icon from 'astro-icon'
+---
+
+<button class="group flex h-10 items-center justify-center gap-3 rounded-full border border-slate-200 px-6 text-sm font-medium text-slate-600 duration-200 ease-in-out hover:bg-slate-50 copy-url-button">
+  <Icon
+    name="copy"
+    class="h-3.5 w-3.5 text-slate-500 transition duration-200 ease-in-out group-hover:text-slate-600"
+    stroke-width="1.25"
+  />
+   Copy link
+</button>
+
+<script>
+  const buttons = document.querySelectorAll('button.copy-url-button');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href);
+    });
+  });
+</script>
