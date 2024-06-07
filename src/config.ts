@@ -17,7 +17,7 @@ export const SITE: Site = {
   website: 'https://kevinthompson.info',
   author: 'Kevin Thompson',
   description:
-    "I'm a full-stack software engineer, game developer and mentor living in Southern California. I create web applications, video games and educational content using a variety of tools and technologies.",
+    "Hi, I'm Kevin Thompson, a full-stack software engineer, game developer and educator living in Southern California. I create web applications, video games and educational content using a variety of tools and technologies.",
   title: 'Kevin Thompson',
   ogImage: 'kevinthompson-og.png',
   postsPerPage: 9,
