@@ -3,6 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.blog-post {
-  word-break: break-all;
+.blog-post code {
+  word-break: break-word;
 }
