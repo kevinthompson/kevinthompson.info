@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import logoIcon from '@images/logo-icon.png'
 import Button from '@components/Button.astro'
 import Icon from 'astro-icon'
+import { SITE } from '@config'
 
 const pathname = Astro.url.pathname.replace(/(?<=.)\/$/, '')
 
@@ -11,6 +12,14 @@ const links = [
   { label: 'Blog', href: '/blog' },
   { label: 'Games', href: 'https://kevinthompson.itch.io/' },
 ]
+
+interface Props {
+  callToAction?: string
+}
+
+const {
+  callToAction = "email",
+} = Astro.props
 ---
 
 <header class="h-24 border-b border-slate-200/80 bg-white">
@@ -54,10 +63,17 @@ const links = [
 
       <div class="flex items-center">
         <!-- Call to action -->
-        <Button href="mailto:email@kevinthompson.info?subject=Hello from kevinthompson.info!" variant="secondary">
-          <Icon name="envelope" class="h-4 w-4" />
-          Email me
-        </Button>
+        {callToAction == "rss" ? (
+          <Button href={`${SITE.website}/rss.xml`} variant="secondary">
+            <Icon name="rss" class="h-4 w-4" />
+            RSS
+          </Button>
+        ) : (
+          <Button href="mailto:email@kevinthompson.info?subject=Hello from kevinthompson.info!" variant="secondary">
+            <Icon name="envelope" class="h-4 w-4" />
+            Email me
+          </Button>
+        )}
 
         <!-- Mobile menu button -->
         <div class="ml-4 md:hidden" x-data="{ mobileMenuOpen: false }">

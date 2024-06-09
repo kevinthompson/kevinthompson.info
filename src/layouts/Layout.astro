@@ -14,6 +14,7 @@ interface Props {
   description?: string
   ogImage?: string
   canonicalURL?: string
+  callToAction?: string
 }
 
 const {
@@ -23,6 +24,7 @@ const {
   ogImage = SITE.ogImage,
   canonicalURL = new URL(Astro.url.pathname.replace(/\/$/, ''), Astro.site)
     .href,
+  callToAction = null
 } = Astro.props
 
 const socialImageURL = new URL(ogImage ?? SITE.ogImage, Astro.url.origin).href
@@ -69,7 +71,7 @@ const socialImageURL = new URL(ogImage ?? SITE.ogImage, Astro.url.origin).href
     <ViewTransitions />
   </head>
   <body>
-    <Header />
+    <Header callToAction={callToAction} />
     <slot />
     <Footer />
   </body>

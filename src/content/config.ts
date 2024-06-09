@@ -11,6 +11,7 @@ const blogCollection = defineCollection({
       category: z.enum(['Stories', 'Tutorials']),
       description: z.string(),
       publishDate: z.date(),
+      canonicalURL: z.string().optional(),
     }),
 })
 

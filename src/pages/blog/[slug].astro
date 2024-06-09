@@ -32,7 +32,7 @@ const ogImageUrl = typeof ogImage === 'string' ? ogImage : ogImage?.src
 const categorySlug = slugify(post.category)
 ---
 
-<Layout title={post.title} description={post.description} ogImage={ogImageUrl}>
+<Layout title={post.title} description={post.description} ogImage={ogImageUrl} canonicalURL={post.canonicalURL} callToAction="rss">
   <main>
     <article class="blog-post">
       {/* Article Header */}
