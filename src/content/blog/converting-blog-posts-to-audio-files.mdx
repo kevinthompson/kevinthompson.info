@@ -1,0 +1,74 @@
+---
+publishDate: 2024-06-20
+title: 'Converting Blog Posts to Audio Files'
+category: 'Tutorials'
+description: "I wanted to have a backlog of blogs posts narrated to me while I worked, without paying for a subscription service."
+image:
+  src: '@images/blog/converting-blog-posts-to-audio/command-line.png'
+  alt: 'Terminal command line showing MacOS say command'
+showCoverImage: false
+---
+
+import Image from '@components/mdx/MdxImage.astro'
+import spokenContentSettingsImage from '@images/blog/converting-blog-posts-to-audio/spoken-content-settings.png'
+import sylvieArticlesAppleMusicImage from '@images/blog/converting-blog-posts-to-audio/sylvie-articles-apple-music.png'
+
+I was recently made aware of the game designer Sylvie, and their [collection of articles](https://drive.google.com/drive/folders/1_5KGY-gkktJ4CCapAnojL0QytubgLjqO) on games and game design. I wanted to work my way through this wealth of content, but I wasn't sure when I would have the time read them all. I thought it would be great if I could just have the articles narrated to me and I was sure there would be a ready made solution for that (maybe there still is, and I didn't look hard enough, but bear with me here).
+
+To be fair I did find a handful of subscription services that offered AI narration of articles, but they were all about $15-30 per month. I also tried using the VoiceOver accessibility feature of my Mac, which worked fairly well, but couldn't narrate content in the background. As soon as I changed focus it would start narrating what I was doing instead of the content I wanted it to read in the background.
+
+---
+
+## Finding a Solution
+
+I was annoyed that I couldn't find a quick and easy solution to this problem, but then I remembered the `say` command on my Mac. Here's the abbreviated `man` page for it:
+
+```
+NAME
+      say - Convert text to audible speech
+
+SYNOPSIS
+      say [-f file | string ...] [-o outfile]
+
+DESCRIPTION
+      This tool uses the Speech Synthesis manager to convert input
+      text to audible speech and either play it through the sound
+      output device chosen in System Preferences or save it to an
+      AIFF file.
+```
+
+I had used `say` in the past as a toy, making the computer say goofy things, or as part of a script to let me know the status of some other process, but I had never considered using it to convert a text file to audio.
+
+As a quick test I wrote some sample text into a `.txt` file and ran it through say:
+
+```sh
+say -f input.txt
+```
+
+Sure enough, it spoke the content back out to me. The first thing I noticed though was that the default system voice was not something I could have a whole article narrated to me in. The `say` command has a flag available for controlling the voice, but in this case I found it easier to change the default system voice in `System Settings > Accessibilty > Spoken Content`.
+
+<Image
+  src={spokenContentSettingsImage}
+  alt="Settings for spoken content on MacOS"
+/>
+
+Once I'd found a good voice to use for the content, I copied and pasted the content of one of the articles I wanted to "read" into my inpute and ran the `say` command again, this time with an output file defined as well.
+
+```sh
+say -f input.txt -o article.aiff
+```
+
+The result was a reasonably well narrated article that I could drop into my audio player and listen to in the background! From there I downloaded all of the articles and ran them all through the `say` command using `xargs` and the result was a folder full of `aiff` files that I was able to throw into a playlist.
+
+<Image
+  src={sylvieArticlesAppleMusicImage}
+  alt="Apple Music interface with playlist of spoken articles"
+/>
+
+---
+
+## Thoughts on Future Iterations
+
+If I continue to find this functionality useful my next thought would be to create a browser extension that identifies the main body of the current page, pipes that text into the `say` command. I think I'd want to have options for narrating the content immediately, or outputting an `.aiff` file, then optionally adding that audio file to a playlist.
+
+In the past I've always preferred to read (with my eyeballs) written content, but I'm finally coming around to the reality of audio content being more compatible with my schedule.
