@@ -32,12 +32,18 @@ const categorySlug = slugify(post.category)
       href={post.path}
       class="group aspect-h-9 aspect-w-16 relative block w-full overflow-hidden rounded-xl md:aspect-h-2 md:aspect-w-3"
     >
-      <Image
-        src={post.image.src}
-        alt={post.image.alt}
-        class="w-full rounded-xl bg-slate-100 object-cover duration-300 group-hover:scale-105"
-        transition:name={`${post.slug}-image`}
-      />
+      {post.image ? (
+        <Image
+          src={post.image.src}
+          alt={post.image.alt}
+          class="w-full rounded-xl bg-slate-100 object-cover duration-300 group-hover:scale-105"
+          transition:name={`${post.slug}-image`}
+        />
+      ) : (
+        <div class="bg-amber-400 duration-300 group-hover:scale-105 flex items-center justify-center">
+          <p class="text-3xl font-bold uppercase">{post.category}</p>
+        </div>
+      )}
       <div
         class="absolute inset-0 rounded-xl ring-1 ring-inset ring-slate-900/5"
       >
@@ -57,7 +63,7 @@ const categorySlug = slugify(post.category)
       <h3
         class="mt-4 font-display text-xl font-medium leading-normal text-slate-900 decoration-slate-400 transition duration-200 ease-in-out group-hover:text-amber-500"
       >
-        <a href={post.path}>
+        <a href={post.path} class="text-pretty">
           <span class="absolute inset-0"></span>
           {post.title}
         </a>
