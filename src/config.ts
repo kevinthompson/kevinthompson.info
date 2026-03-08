@@ -61,7 +61,7 @@ export const SOCIALS: SocialObjects = [
   },
   {
     name: 'youTube',
-    href: 'https://youtube.com/@kevinmakesgames',
+    href: 'https://youtube.com/@kevin.makes.videos',
     label: 'YouTube',
     ariaLabel: 'Follow on YouTube',
     showInHero: true,
