@@ -1,15 +1,9 @@
 ---
-publishDate: 2024-06-20
+date: 2024-06-20
 title: 'Converting Blog Posts to Audio Files'
-category: 'Tutorials'
 description: "I wanted to have a backlog of blogs posts narrated to me while I worked, without paying for a subscription service."
-image:
-  src: '@images/blog/converting-blog-posts-to-audio/command-line.png'
-  alt: 'Terminal command line showing MacOS say command'
-showCoverImage: false
 ---
 
-import Image from '@components/mdx/MdxImage.astro'
 import spokenContentSettingsImage from '@images/blog/converting-blog-posts-to-audio/spoken-content-settings.png'
 import sylvieArticlesAppleMusicImage from '@images/blog/converting-blog-posts-to-audio/sylvie-articles-apple-music.png'
 
@@ -47,10 +41,7 @@ say -f input.txt
 
 Sure enough, it spoke the content back out to me. The first thing I noticed though was that the default system voice was not something I could have a whole article narrated to me in. The `say` command has a flag available for controlling the voice, but in this case I found it easier to change the default system voice in `System Settings > Accessibilty > Spoken Content`.
 
-<Image
-  src={spokenContentSettingsImage}
-  alt="Settings for spoken content on MacOS"
-/>
+<img src={spokenContentSettingsImage.src} alt="Settings for spoken content on MacOS" />
 
 Once I'd found a good voice to use for the content, I copied and pasted the content of one of the articles I wanted to "read" into my inpute and ran the `say` command again, this time with an output file defined as well.
 
@@ -60,10 +51,7 @@ say -f input.txt -o article.aiff
 
 The result was a reasonably well narrated article that I could drop into my audio player and listen to in the background! From there I downloaded all of the articles and ran them all through the `say` command using `xargs` and the result was a folder full of `aiff` files that I was able to throw into a playlist.
 
-<Image
-  src={sylvieArticlesAppleMusicImage}
-  alt="Apple Music interface with playlist of spoken articles"
-/>
+<img src={sylvieArticlesAppleMusicImage.src} alt="Apple Music interface with playlist of spoken articles" />
 
 ---
 

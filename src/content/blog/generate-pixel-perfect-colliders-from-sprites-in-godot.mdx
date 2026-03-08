@@ -1,14 +1,9 @@
 ---
-publishDate: 2023-09-30
+date: 2023-09-30
 title: 'Generate Pixel Perfect Colliders from Sprites in Godot'
-category: 'Tutorials'
-image:
-  src: '@images/blog/godot-sprite-collider.jpg'
-  alt: 'Godot editor interface showing sprite colliders'
 description: 'How I created a tool script that automatically generates pixel perfect colliders from a 2D sprites as the image changes.'
 ---
 
-import Image from '@components/mdx/MdxImage.astro'
 import sprite2dCreatePolygonImage from '@images/blog/godot-sprite-tool/sprite2d-collision-ui.png'
 import godotCollisionModalImage from '@images/blog/godot-sprite-tool/godot-collision-modal.png'
 import godotTextureExample from '@images/blog/godot-sprite-tool/texture-example.gif'
@@ -23,17 +18,11 @@ Although I don't yet have a great deal of experince in Godot, this seemed like a
 
 To start I'll point out that there is a built-in tool to create collision shapes from sprites in Godot. To access it, you click the `Sprite2D` dropdown when you have a Sprite2D node selected.
 
-<Image
-  src={sprite2dCreatePolygonImage}
-  alt="Sprite2D node dropdown in Godot editor"
-/>
+<img src={sprite2dCreatePolygonImage.src} alt="Sprite2D node dropdown in Godot editor" />
 
 Clicking on that option brings up a modal that will allow you to customize and then create your `CollisionPolygon2D` node.
 
-<Image
-  src={godotCollisionModalImage}
-  alt="Godot editor CollisionPolygon2D modal"
-/>
+<img src={godotCollisionModalImage.src} alt="Godot editor CollisionPolygon2D modal" />
 
 If you're not changing your art often, this feature will probably be all you ever need. In Adam's case, he was making constant changes to level artwork, moving back and forth between Aseprite and Godot to adjust the level and then playtest it. Needing to delete the existing `CollisionPolygon2D` node and then step through the creation process after each change was tedious.
 
