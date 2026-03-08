@@ -1,19 +1,31 @@
 import rss from '@astrojs/rss'
-import { getSortedPosts } from '@utils/posts'
-import { SITE } from '@config'
+import { getCollection } from 'astro:content'
+import { HOME } from '@consts'
 
-export async function GET() {
-  const posts = await getSortedPosts()
+type Context = {
+  site: string
+}
+
+export async function GET(context: Context) {
+  const blog = (await getCollection('blog')).filter((post) => !post.data.draft)
+
+  const projects = (await getCollection('projects')).filter(
+    (project) => !project.data.draft,
+  )
+
+  const items = [...blog, ...projects].sort(
+    (a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf(),
+  )
 
   return rss({
-    title: SITE.title,
-    description: SITE.description,
-    site: SITE.website,
-    items: posts.map((post) => ({
-      title: post.data.title,
-      pubDate: post.data.publishDate,
-      description: post.data.description,
-      link: `/blog/${post.slug}/`,
+    title: HOME.TITLE,
+    description: HOME.DESCRIPTION,
+    site: context.site,
+    items: items.map((item) => ({
+      title: item.data.title,
+      description: item.data.description,
+      pubDate: item.data.date,
+      link: `/${item.collection}/${item.slug}/`,
     })),
   })
 }
