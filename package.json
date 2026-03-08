@@ -15,7 +15,6 @@
     "@astrojs/sitemap": "^3.4.1",
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource/inter": "^5.0.17",
-    "@fontsource/lora": "^5.0.16",
     "@tailwindcss/typography": "^0.5.10",
     "astro": "^5.12.2",
     "clsx": "^2.1.0",
