@@ -4,11 +4,7 @@
 
 html {
   overflow-y: scroll;
-  color-scheme: light;
-}
-
-html.dark {
-  color-scheme: dark;
+  color-scheme: light dark;
 }
 
 html,
@@ -71,4 +67,15 @@ html #back-to-top {
 
 html.scrolled #back-to-top {
   @apply opacity-100 pointer-events-auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .astro-code,
+  .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
 }
