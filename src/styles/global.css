@@ -21,8 +21,16 @@ body {
 
 header {
   @apply fixed top-0 left-0 right-0 z-50 py-5;
-  @apply bg-stone-100/75 dark:bg-stone-900/25;
+}
+
+header:before {
+  @apply bg-stone-100/75 dark:bg-stone-900/90;
   @apply backdrop-blur-sm;
+  content: "";
+  position: absolute;
+  inset: -20px;
+  z-index: -1;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 80%, rgba(0, 0, 0, 0));
 }
 
 main {
